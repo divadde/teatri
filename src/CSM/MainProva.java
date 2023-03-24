@@ -18,12 +18,12 @@ public class MainProva {
         double[] a = {0.95,0.05};
         int n4 = 2;
         double mu4 = 0.9;
-        double[] q = {0.2,0.3,0.3,0.2};
-        double[] delay = {0.5,1.5};
+        Double[] q = {0.2,0.3,0.3,0.2};
+        Double[] delay = {0.5,1.5};
         int numClients = 4;
         int numServersS1 = 2;
 
-        double tEnd = 36000;
+        double tEnd = 100;
 
         Distribution ds0 = new ExponentialDistribution(r,mu0);
         Distribution ds1 = new ExponentialDistribution(r,mu1);
@@ -53,6 +53,7 @@ public class MainProva {
         s2.send("init",ds2,acqS234,1,2);
         s3.send("init",ds3,acqS234,1,3);
         s4.send("init",ds4,acqS234,1,4);
+
 
         cm.controller();
     }

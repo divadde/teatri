@@ -15,7 +15,7 @@ public class Station extends AbstractStation{
     //todo: forse non c'è bisogno di passare un array di abstractstation, tanto queste sono stazioni pensate per inviare a una sola stazione
     @Msgsrv
     public void init(Distribution d, AbstractStation[] acquaintances, Integer numServers, Integer idStation) throws IllegalArgumentException {
-        if (acquaintances.length==0 || numServers<=1) throw new IllegalArgumentException();
+        if (acquaintances.length==0 || numServers<1) throw new IllegalArgumentException();
         super.send("init",d,acquaintances); //todo: verifica se funziona
         this.numServers=numServers;
         this.idStation = idStation;
