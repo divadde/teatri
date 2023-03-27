@@ -7,7 +7,7 @@ import java.util.LinkedList;
 public class ReflectiveStation extends AbstractStation{
 
 
-    private int totalClients; //parametro k //todo: andrebbe fatto un array di clienti? non credo
+    private int totalClients; //parametro k
     private int reflectingClients;
     private int outClients;
 
@@ -16,7 +16,7 @@ public class ReflectiveStation extends AbstractStation{
     @Msgsrv
     public void init(Distribution d, AbstractStation[] acquaintances, Integer totalClients) throws IllegalArgumentException {
         if (acquaintances.length==0 || totalClients<=0) throw new IllegalArgumentException();
-        super.send("init",d,acquaintances); //todo: verifica se funziona
+        super.send("init",d,acquaintances); //todo: verifica se funziona (90% si)
         this.totalClients = totalClients;
         reflectingClients=0;
         outClients=0;
@@ -30,7 +30,7 @@ public class ReflectiveStation extends AbstractStation{
         if (outClients>0) outClients--;
         reflectingClients++;
         this.send(d.nextSample(),"departure",c);
-        if (totalClients<reflectingClients+outClients) {
+        if (totalClients>reflectingClients+outClients) {
             Client cNew = new Client(generation++);
             this.send("arrival",cNew);
         }

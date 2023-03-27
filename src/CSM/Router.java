@@ -29,7 +29,7 @@ public class Router extends AbstractStation{
     //todo: si può fare meglio?
     private AbstractStation getRandomStation(){
         int position=0;
-        double extracted= d.nextSample();
+        double extracted = d.nextSample();
         double intervallo1 = probabilities[0];
         double intervallo2 = probabilities[1]+intervallo1;
         double intervallo3 = probabilities[2]+intervallo2;
