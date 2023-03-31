@@ -10,16 +10,17 @@ public class ReflectiveStation extends AbstractStation{
     private int totalClients; //parametro k
     private int reflectingClients;
     private int outClients;
+    private Observer observer;
 
     private static int generation=0;
-
     @Msgsrv
-    public void init(Distribution d, AbstractStation[] acquaintances, Integer totalClients) throws IllegalArgumentException {
+    public void init(Distribution d, AbstractStation[] acquaintances, Integer totalClients,Observer observer) throws IllegalArgumentException {
         if (acquaintances.length==0 || totalClients<=0) throw new IllegalArgumentException();
         super.send("init",d,acquaintances); //todo: verifica se funziona (90% si)
         this.totalClients = totalClients;
         reflectingClients=0;
         outClients=0;
+        this.observer=observer;
         Client c = new Client(generation++);
         this.send("arrival",c);
     }
@@ -42,5 +43,6 @@ public class ReflectiveStation extends AbstractStation{
         reflectingClients--;
         outClients++;
         acquaintances[0].send("arrival",c); //invio alla stazione P1
+
     }
 }

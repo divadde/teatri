@@ -15,6 +15,8 @@ public class Station extends AbstractStation{
     private Path path;
     private LinkedList<Client> waitingLine = new LinkedList<>();
 
+    private int numClienti=0; //debug
+
     //todo: forse non c'è bisogno di passare un array di abstractstation, tanto queste sono stazioni pensate per inviare a una sola stazione
     @Msgsrv
     public void init(Distribution d, AbstractStation[] acquaintances, Integer numServers, Integer idStation, Observer observer, Double tEnd) throws IllegalArgumentException {
@@ -30,6 +32,7 @@ public class Station extends AbstractStation{
     @Msgsrv
     public void finish(){
         observer.updateServiceTime(now()-startS);
+        System.out.println(numClienti); //debug
     }
     @Msgsrv
     public void setPath(Path path){
@@ -38,6 +41,7 @@ public class Station extends AbstractStation{
 
     @Override @Msgsrv
     public void arrival(Client c) {
+        numClienti++; //debug
         System.out.println("Cliente "+c.getId()+" arrivato alla stazione "+idStation+". Time: "+now()); //debug
         c.setStartWaitingTime(now());
         switch(state){

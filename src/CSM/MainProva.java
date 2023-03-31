@@ -21,7 +21,7 @@ public class MainProva {
         Double[] q = {0.2,0.3,0.3,0.2};
         Double[] delay = {0.5,1.5};
 
-        int numClients = 20;
+        int numClients = 2;
         int numServersS1 = 3; //pare che il grado di parallelismo consigliato sia 3.
 
         double tEnd = 36000;
@@ -42,10 +42,11 @@ public class MainProva {
         AbstractStation s4 = new Station();
         AbstractStation router = new Router();
 
+        Observer os0 = new Observer();
         Observer os1 = new Observer(); Observer os2 = new Observer(); Observer os3 = new Observer(); Observer os4 = new Observer();
 
         AbstractStation[] acqS0 = {s1};
-        s0.send("init",ds0,acqS0,numClients);
+        s0.send("init",ds0,acqS0,numClients,os0);
 
         Path path = new Path();
         AbstractStation[] acqS1 = {router};
@@ -83,6 +84,11 @@ public class MainProva {
         System.out.println("Sojourn time: "+os4.sojournTime());
         System.out.println("Throughput: "+os4.throughput(tEnd));
         System.out.println("Utilization: "+os4.utilization(tEnd));
+
+        System.out.println("\n Resume intero sistema:");
+        System.out.println("Sojourn time: "+os0.sojournTime());
+        System.out.println("Throughput: "+os0.throughput(tEnd));
+        System.out.println("Utilization: "+os0.utilization(tEnd));
     }
 
 }
