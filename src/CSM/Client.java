@@ -6,6 +6,9 @@ public class Client {
     private double startWaitingTime;
     private double departureTime;
 
+    private double globalArrivalTime;
+    private double globalDepartureTime;
+
     public Client(int id){
         this.id=id;
     }
@@ -26,6 +29,21 @@ public class Client {
     }
     public double getDepartureTime(){
         return departureTime;
+    }
+
+
+
+    public void setGlobalArrivalTime(double globalArrivalTime) {
+        this.globalArrivalTime = globalArrivalTime;
+    }
+    public void setGlobalDepartureTime(double globalDepartureTime){
+        this.globalDepartureTime = globalDepartureTime;
+    }
+    public double getGlobalArrivalTime(){
+        return globalArrivalTime;
+    }
+    public double getGlobalDepartureTime(){
+        return globalDepartureTime;
     }
 
 }

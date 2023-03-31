@@ -21,7 +21,7 @@ public class MainProva {
         Double[] q = {0.2,0.3,0.3,0.2};
         Double[] delay = {0.5,1.5};
 
-        int numClients = 2;
+        int numClients = 20;
         int numServersS1 = 3; //pare che il grado di parallelismo consigliato sia 3.
 
         double tEnd = 36000;
@@ -46,7 +46,7 @@ public class MainProva {
         Observer os1 = new Observer(); Observer os2 = new Observer(); Observer os3 = new Observer(); Observer os4 = new Observer();
 
         AbstractStation[] acqS0 = {s1};
-        s0.send("init",ds0,acqS0,numClients,os0);
+        s0.send("init",ds0,acqS0,numClients,os0,tEnd);
 
         Path path = new Path();
         AbstractStation[] acqS1 = {router};
