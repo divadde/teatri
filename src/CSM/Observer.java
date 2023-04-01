@@ -1,20 +1,18 @@
 package CSM;
 
 public class Observer {
-
-    //todo: verificare correttezza e se manca qualcosa
-    private double busyTime;
+    private double totalSojournTime;
     private double serviceTime;
-    private double departures;
+    private int departures;
 
     public Observer(){
-        busyTime=0;
+        totalSojournTime=0;
         serviceTime=0;
         departures=0;
     }
 
-    public void updateBusyTime(double quantity){
-        busyTime+=quantity;
+    public void updateTotalSojournTime(double quantity){
+        totalSojournTime+=quantity;
     }
 
     public void updateServiceTime(double quantity){
@@ -25,8 +23,11 @@ public class Observer {
         departures+=1;
     }
 
+    public int getDepartures() { return departures; }
+
+
     public double sojournTime(){
-        return busyTime/departures;
+        return totalSojournTime/departures;
     }
 
     public double throughput(double tEnd){

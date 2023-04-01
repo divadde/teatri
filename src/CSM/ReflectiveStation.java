@@ -7,26 +7,24 @@ import java.util.LinkedList;
 public class ReflectiveStation extends AbstractStation{
 
 
-    private int totalClients; //parametro k
-    private int reflectingClients;
-    private int outClients;
+    private int totalClients; //Numero di clienti totali nella simulazione
+    private int reflectingClients; //Numero di clienti fuori dal sistema (dentro la Reflective Station)
+    private int outClients; //Numero di clienti nel sistema (dentro la Reflective Station)
+
     private Observer observer;
-    private boolean finishedGeneration;
-
     private double startS;
-    private double tEnd;
 
+    private boolean finishedGeneration;
     private static int generation=0;
     @Msgsrv
     public void init(Distribution d, AbstractStation[] acquaintances, Integer totalClients, Observer observer, Double tEnd) throws IllegalArgumentException {
-        if (acquaintances.length==0 || totalClients<=0) throw new IllegalArgumentException();
-        super.send("init",d,acquaintances); //todo: verifica se funziona (90% si)
+        if (acquaintances.length==0 || totalClients<=0 || observer==null || tEnd<=0) throw new IllegalArgumentException();
+        super.send("init",d,acquaintances);
         this.totalClients = totalClients;
         reflectingClients=0;
         outClients=0;
-        finishedGeneration=false;
         this.observer=observer;
-        this.tEnd=tEnd;
+        finishedGeneration=false;
         Client c = new Client(generation++);
         this.send("arrival",c);
         this.send(tEnd,"finish");
@@ -35,14 +33,16 @@ public class ReflectiveStation extends AbstractStation{
     @Msgsrv
     public void finish(){
         observer.updateServiceTime(now()-startS);
+        System.out.println(observer.getDepartures()); //todo: debug, stampa da cacciare
     }
 
+    //todo: possibile introduzione di un metodo generate per snellire arrival
     @Override @Msgsrv
     public void arrival(Client c) {
         if (finishedGeneration) {
             observer.incrementDeparture();
             c.setGlobalDepartureTime(now());
-            observer.updateBusyTime(c.getGlobalDepartureTime()-c.getGlobalArrivalTime());
+            observer.updateTotalSojournTime(c.getGlobalDepartureTime()-c.getGlobalArrivalTime());
         }
         if (outClients==0) { observer.updateServiceTime(now()-startS); }
         System.out.println("Cliente "+c.getId()+" inizia a pensare. Time: "+now()); //debug

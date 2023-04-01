@@ -2,6 +2,8 @@ package CSM;
 
 import smart.theatre.distributions.Distribution;
 
+import java.util.Arrays;
+
 public class Router extends AbstractStation{
 
     private Double[] probabilities;
@@ -10,7 +12,7 @@ public class Router extends AbstractStation{
     @Msgsrv
     public void init(Distribution d, AbstractStation[] acquaintances, Double[] probabilities, Double[] delayRange) throws IllegalArgumentException {
         if (acquaintances.length==0 || probabilities.length!=acquaintances.length || delayRange.length!=2) throw new IllegalArgumentException();
-        super.send("init",d,acquaintances); //todo: verifica se funziona
+        super.send("init",d,acquaintances);
         this.probabilities=probabilities;
         this.delayRange=delayRange;
     }
@@ -26,7 +28,7 @@ public class Router extends AbstractStation{
         station.send("arrival",c);
     }
 
-    //todo: si può fare meglio?
+    //todo: rendere più generico?
     private AbstractStation getRandomStation(){
         int position=0;
         double extracted = d.nextSample();

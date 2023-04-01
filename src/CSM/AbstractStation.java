@@ -5,7 +5,6 @@ import smart.theatre.standalone.Actor;
 
 public abstract class AbstractStation extends Actor {
 
-    //todo, vanno bene con protected? o vanno private?
     protected enum State{
         FREE, BUSY
     }
@@ -13,11 +12,10 @@ public abstract class AbstractStation extends Actor {
     protected AbstractStation[] acquaintances;
     protected State state;
 
-    //todo: associare anche degli observers? (tipo Path)
 
     @Msgsrv
     public void init(Distribution d, AbstractStation[] acquaintances) throws IllegalArgumentException {
-        if(acquaintances.length==0) throw new IllegalArgumentException();
+        if (d==null) throw new IllegalArgumentException();
         state=State.FREE;
         this.d=d;
         this.acquaintances=acquaintances;

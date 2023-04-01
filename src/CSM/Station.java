@@ -43,7 +43,7 @@ public class Station extends AbstractStation{
     public void arrival(Client c) {
         numClienti++; //debug
         System.out.println("Cliente "+c.getId()+" arrivato alla stazione "+idStation+". Time: "+now()); //debug
-        c.setStartWaitingTime(now());
+        c.setArrivalTime(now());
         switch(state){
             case FREE:
                 if(path!=null) path.up(now());
@@ -66,7 +66,7 @@ public class Station extends AbstractStation{
         System.out.println("Cliente "+c.getId()+" parte dalla stazione "+idStation+". Time: "+now()); //debug
         c.setDepartureTime(now());
         observer.incrementDeparture();
-        observer.updateBusyTime(c.getDepartureTime()-c.getStartWaitingTime());
+        observer.updateTotalSojournTime(c.getDepartureTime()-c.getArrivalTime());
         servingClients--;
         acquaintances[0].send("arrival",c);
         if (state==State.BUSY){
