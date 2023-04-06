@@ -9,7 +9,7 @@ public final class Parameters {
     final static Double[] q = {0.2,0.3,0.3,0.2};
     final static Double[] delay = {0.5,1.5};
 
-    final static int numClients = 100;
+    final static int numClients = 20;
     final static int numServersS1 = 3; //Pare che il grado di parallelismo consigliato sia 3.
 
     final static double tEnd = 36000;
