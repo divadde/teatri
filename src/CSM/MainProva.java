@@ -36,7 +36,7 @@ public class MainProva {
 
         //Inizializzazione delle stazioni
         AbstractStation[] acqS0 = {s1}; //Acquaintances
-        s0.send("init",ds0,acqS0,Parameters.numClients,os0,Parameters.tEnd,Parameters.verbose);
+        s0.send("init",ds0,acqS0,Parameters.numClients,os0,Parameters.tEnd,true);
 
         Path path = new Path(); //Creazione del Path per il calcolo del grado di parallelismo di S1
         AbstractStation[] acqS1 = {router}; //Acquaintances

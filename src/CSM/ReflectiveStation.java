@@ -4,12 +4,10 @@ import smart.theatre.distributions.Distribution;
 
 public class ReflectiveStation extends AbstractStation{
     private int totalClients; //Numero di clienti totali durante la simulazione
-    private int reflectingClients; //Numero di clienti fuori dal sistema (dentro la Reflective Station) //todo: si può cacciare? sfruttiamo generation
-    private int outClients; //Numero di clienti nel sistema (fuori dalla Reflective Station) //todo: si può sostituire? con una booleana
-
+    private int thinkingClients; //Numero di clienti attualmente nella Reflective Station (fuori dal Sistema)
     private Observer observer;
-    private static int generation=0;
 
+    private static int generation=0;
     private boolean verbose;
 
     @Msgsrv
@@ -18,8 +16,7 @@ public class ReflectiveStation extends AbstractStation{
         super.send("init",d,acquaintances);
         this.verbose=verbose;
         this.totalClients = totalClients;
-        reflectingClients=0;
-        outClients=0;
+        thinkingClients=0;
         this.observer=observer;
         this.send("generate");
         this.send(tEnd,"finish");
@@ -32,11 +29,11 @@ public class ReflectiveStation extends AbstractStation{
 
     @Msgsrv
     public void generate(){
-        Client c = new Client(generation++);
-        reflectingClients++;
+        Client c = new Client(++generation);
+        thinkingClients++;
         if (verbose) System.out.println("Cliente "+c.getId()+" inizia a pensare. Time: "+now());
         this.send(d.nextSample(),"departure",c);
-        if (totalClients>reflectingClients) {
+        if (totalClients>thinkingClients) {
             this.send("generate");
         }
     }
@@ -46,19 +43,17 @@ public class ReflectiveStation extends AbstractStation{
         observer.incrementDeparture();
         c.setGlobalDepartureTime(now());
         observer.updateTotalSojournTime(c.getGlobalDepartureTime()-c.getGlobalArrivalTime());
-        outClients--;
-        if (outClients==0) { observer.endService(now()); }
+        thinkingClients++;
+        if (thinkingClients==totalClients) { observer.endService(now()); }
         if (verbose) System.out.println("Cliente "+c.getId()+" inizia a pensare. Time: "+now());
-        reflectingClients++;
         this.send(d.nextSample(),"departure",c);
     }
 
     @Override @Msgsrv
     public void departure(Client c) {
-        if (outClients==0) observer.startService(now());
+        if (thinkingClients==totalClients) observer.startService(now());
         if (verbose) System.out.println("Cliente "+c.getId()+" smette di pensare. Time: "+now());
-        reflectingClients--;
-        outClients++;
+        thinkingClients--;
         acquaintances[0].send("arrival",c); //invio alla stazione P1
         c.setGlobalArrivalTime(now());
     }
