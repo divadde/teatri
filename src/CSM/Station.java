@@ -6,7 +6,6 @@ import java.util.LinkedList;
 
 public class Station extends AbstractStation{
     private int numServers;
-    private int clientsInWaiting;
     private int servingClients;
 
     private int idStation;
@@ -16,17 +15,14 @@ public class Station extends AbstractStation{
 
     private boolean verbose;
 
-
-    //todo: forse non c'è bisogno di passare un array di abstractstation, tanto queste sono stazioni pensate per inviare a una sola stazione
     @Msgsrv
     public void init(Distribution d, AbstractStation[] acquaintances, Integer numServers, Integer idStation, Observer observer, Double tEnd, Boolean verbose) throws IllegalArgumentException {
-        if (acquaintances.length==0 || numServers<1) throw new IllegalArgumentException();
+        if (acquaintances.length==0 || numServers<1 || observer==null || tEnd<0 ) throw new IllegalArgumentException();
         super.send("init",d,acquaintances);
         this.verbose=verbose;
         this.numServers=numServers;
-        this.idStation = idStation;
+        this.idStation=idStation;
         this.observer=observer;
-        clientsInWaiting=0;
         servingClients=0;
         this.send(tEnd,"finish");
     }
@@ -41,37 +37,34 @@ public class Station extends AbstractStation{
 
     @Override @Msgsrv
     public void arrival(Client c) {
-        if (verbose) System.out.println("Cliente "+c.getId()+" arrivato alla stazione "+idStation+". Time: "+now()); //debug
+        if (verbose) System.out.println("Cliente "+c.getId()+" arrivato alla stazione "+idStation+". Time: "+now());
         c.setArrivalTime(now());
         switch(state){
-            case FREE:
+            case FREE: //Una stazione k-server è FREE finché può servire clients
                 if(path!=null) path.up(now());
                 if(servingClients==0) {
-                    if (verbose) System.out.println("Stazione "+idStation+" libera");
                     observer.startService(now());
                 }
-                if (verbose) System.out.println("Stazione "+idStation+" libera, il Cliente "+c.getId()+" può essere servito. Time: "+now()); //debug
+                if(verbose) System.out.println("Stazione "+idStation+" libera, il Cliente "+c.getId()+" può essere servito. Time: "+now()); //debug
                 this.send(d.nextSample(),"departure",c);
                 servingClients++;
-                if (servingClients==numServers) state=State.BUSY;
+                if(servingClients==numServers) state=State.BUSY;
                 break;
             case BUSY:
-                clientsInWaiting++;
-                if (verbose) System.out.println("Stazione "+idStation+" occupata, il Cliente "+c.getId()+" si accoda (Clienti in attesa "+clientsInWaiting+"). Time: "+now()); //debug
+                if (verbose) System.out.println("Stazione "+idStation+" occupata, il Cliente "+c.getId()+" si accoda (Clienti in attesa "+waitingLine.size()+"). Time: "+now()); //debug
                 waitingLine.addLast(c);
         }
     }
 
     @Override @Msgsrv
     public void departure(Client c) {
-        if(path!=null) path.down(now());
+        if (path!=null) path.down(now());
         if (verbose) System.out.println("Cliente "+c.getId()+" parte dalla stazione "+idStation+". Time: "+now()); //debug
         c.setDepartureTime(now());
-        observer.incrementDeparture();
         observer.updateTotalSojournTime(c.getDepartureTime()-c.getArrivalTime());
+        observer.incrementDeparture();
         servingClients--;
-        acquaintances[0].send("arrival",c);
-        switch(state){
+        switch (state){
             case FREE:
                 if(servingClients==0) {
                     observer.endService(now());
@@ -87,12 +80,12 @@ public class Station extends AbstractStation{
                 else {
                     if(path!=null) path.up(now());
                     Client nextClient = waitingLine.removeFirst();
-                    clientsInWaiting--;
-                    if (verbose) System.out.println("Cliente "+nextClient.getId()+" esce dalla coda della stazione "+idStation+", pronto ad essere servito (Clienti in attesa "+clientsInWaiting+"). Time: "+now()); //debug
+                    if (verbose) System.out.println("Cliente "+nextClient.getId()+" esce dalla coda della stazione "+idStation+", pronto ad essere servito (Clienti in attesa "+waitingLine.size()+"). Time: "+now()); //debug
                     this.send(d.nextSample(),"departure",nextClient);
                     servingClients++;
                 }
         }
+        acquaintances[0].send("arrival",c);
     }
 
 }
