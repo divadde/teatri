@@ -44,9 +44,9 @@ public class ReflectiveStation extends AbstractStation{
             c.setGlobalDepartureTime(now());
             observer.updateTotalSojournTime(c.getGlobalDepartureTime()-c.getGlobalArrivalTime());
         }
+        if (outClients>0) outClients--;
         if (outClients==0) { observer.updateServiceTime(now()-startS); }
         System.out.println("Cliente "+c.getId()+" inizia a pensare. Time: "+now()); //debug
-        if (outClients>0) outClients--;
         reflectingClients++;
         this.send(d.nextSample(),"departure",c);
         if (totalClients>reflectingClients+outClients) {

@@ -25,6 +25,8 @@ public class Observer {
 
     public int getDepartures() { return departures; }
 
+    public double getServiceTime() {return serviceTime; }
+
 
     public double sojournTime(){
         return totalSojournTime/departures;

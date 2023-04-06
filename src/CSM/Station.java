@@ -32,6 +32,7 @@ public class Station extends AbstractStation{
     @Msgsrv
     public void finish(){
         observer.updateServiceTime(now()-startS);
+        System.out.println("Nuovo tempo di servizio, stazione "+idStation+": "+observer.getServiceTime());
         System.out.println(numClienti); //debug
     }
     @Msgsrv
@@ -47,7 +48,10 @@ public class Station extends AbstractStation{
         switch(state){
             case FREE:
                 if(path!=null) path.up(now());
-                if (servingClients==0) { startS=now();}
+                if(servingClients==0) {
+                    System.out.println("Stazione "+idStation+" libera");
+                    startS=now();
+                }
                 System.out.println("Stazione "+idStation+" libera, il Cliente "+c.getId()+" può essere servito. Time: "+now()); //debug
                 this.send(d.nextSample(),"departure",c);
                 servingClients++;
@@ -69,21 +73,29 @@ public class Station extends AbstractStation{
         observer.updateTotalSojournTime(c.getDepartureTime()-c.getArrivalTime());
         servingClients--;
         acquaintances[0].send("arrival",c);
-        if (state==State.BUSY){
-            if (waitingLine.size()==0) {
-                state=State.FREE;
+        switch(state){
+            case FREE:
                 if(servingClients==0) {
                     observer.updateServiceTime(now()-startS);
+                    System.out.println("Nuovo tempo di servizio, stazione "+idStation+": "+observer.getServiceTime());
                 }
-            }
-            else {
-                if(path!=null) path.up(now());
-                Client nextClient = waitingLine.removeFirst();
-                clientsInWaiting--;
-                System.out.println("Cliente "+nextClient.getId()+" esce dalla coda della stazione "+idStation+", pronto ad essere servito (Clienti in attesa "+clientsInWaiting+"). Time: "+now()); //debug
-                this.send(d.nextSample(),"departure",nextClient);
-                servingClients++;
-            }
+                break;
+            case BUSY:
+                if (waitingLine.size()==0) {
+                    state=State.FREE;
+                    if(servingClients==0) {
+                        observer.updateServiceTime(now()-startS);
+                        System.out.println("Nuovo tempo di servizio, stazione "+idStation+": "+observer.getServiceTime());
+                    }
+                }
+                else {
+                    if(path!=null) path.up(now());
+                    Client nextClient = waitingLine.removeFirst();
+                    clientsInWaiting--;
+                    System.out.println("Cliente "+nextClient.getId()+" esce dalla coda della stazione "+idStation+", pronto ad essere servito (Clienti in attesa "+clientsInWaiting+"). Time: "+now()); //debug
+                    this.send(d.nextSample(),"departure",nextClient);
+                    servingClients++;
+                }
         }
     }
 
