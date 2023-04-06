@@ -13,4 +13,7 @@ public final class Parameters {
     final static int numServersS1 = 3; //Pare che il grado di parallelismo consigliato sia 3.
 
     final static double tEnd = 36000;
+
+    final static boolean verbose = false;
+
 }

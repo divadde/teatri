@@ -36,20 +36,20 @@ public class MainProva {
 
         //Inizializzazione delle stazioni
         AbstractStation[] acqS0 = {s1}; //Acquaintances
-        s0.send("init",ds0,acqS0,Parameters.numClients,os0,Parameters.tEnd);
+        s0.send("init",ds0,acqS0,Parameters.numClients,os0,Parameters.tEnd,Parameters.verbose);
 
         Path path = new Path(); //Creazione del Path per il calcolo del grado di parallelismo di S1
         AbstractStation[] acqS1 = {router}; //Acquaintances
-        s1.send("init",ds1,acqS1,Parameters.numServersS1,1,os1,Parameters.tEnd);
+        s1.send("init",ds1,acqS1,Parameters.numServersS1,1,os1,Parameters.tEnd,Parameters.verbose);
         s1.send("setPath",path);
 
         AbstractStation[] acqR = {s0,s2,s3,s4}; //Acquaintances
         router.send("init",dr,acqR,Parameters.q,Parameters.delay);
 
         AbstractStation[] acqS234 = {s1}; //Acquaintances
-        s2.send("init",ds2,acqS234,1,2,os2,Parameters.tEnd);
-        s3.send("init",ds3,acqS234,1,3,os3,Parameters.tEnd);
-        s4.send("init",ds4,acqS234,1,4,os4,Parameters.tEnd);
+        s2.send("init",ds2,acqS234,1,2,os2,Parameters.tEnd,Parameters.verbose);
+        s3.send("init",ds3,acqS234,1,3,os3,Parameters.tEnd,Parameters.verbose);
+        s4.send("init",ds4,acqS234,1,4,os4,Parameters.tEnd,Parameters.verbose);
 
         //Inizio simulazione
         cm.controller();
