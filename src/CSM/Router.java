@@ -28,17 +28,16 @@ public class Router extends AbstractStation{
         station.send("arrival",c);
     }
 
-    //todo: rendere più generico?
-    private AbstractStation getRandomStation(){
+    private AbstractStation getRandomStation(){ //Metodo specifico per 4 stazioni di riferimento
         int position=0;
         double extracted = d.nextSample();
-        double intervallo1 = probabilities[0];
-        double intervallo2 = probabilities[1]+intervallo1;
-        double intervallo3 = probabilities[2]+intervallo2;
-        if (extracted<=intervallo1) position=0;
-        if (intervallo1 < extracted && extracted <= intervallo2) position=1;
-        if (intervallo2 < extracted && extracted <= intervallo3) position=2;
-        if (intervallo3 < extracted) position=3;
+        double soglia1 = probabilities[0];
+        double soglia2 = probabilities[1]+soglia1;
+        double soglia3 = probabilities[2]+soglia2;
+        if (extracted<=soglia1) position=0;
+        if (soglia1 < extracted && extracted <= soglia2) position=1;
+        if (soglia2 < extracted && extracted <= soglia3) position=2;
+        if (soglia3 < extracted) position=3;
         return acquaintances[position];
     }
 

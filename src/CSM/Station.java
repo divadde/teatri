@@ -17,18 +17,16 @@ public class Station extends AbstractStation{
 
     @Msgsrv
     public void init(Distribution d, AbstractStation[] acquaintances, Integer numServers, Integer idStation, Observer observer, Double tEnd, Boolean verbose) throws IllegalArgumentException {
-        if (acquaintances.length==0 || numServers<1 || observer==null || tEnd<0 ) throw new IllegalArgumentException();
-        super.send("init",d,acquaintances);
-        this.verbose=verbose;
-        this.numServers=numServers;
-        this.idStation=idStation;
-        this.observer=observer;
-        servingClients=0;
-        this.send(tEnd,"finish");
+        if (acquaintances.length == 0 || numServers < 1 || observer == null || tEnd < 0)
+            throw new IllegalArgumentException();
+        super.send("init", d, acquaintances);
+        this.verbose = verbose;
+        this.numServers = numServers;
+        this.idStation = idStation;
+        this.observer = observer;
+        servingClients = 0;
     }
-    @Msgsrv
-    public void finish(){
-    }
+
     @Msgsrv
     public void setPath(Path path){
         this.path=path;
@@ -41,8 +39,8 @@ public class Station extends AbstractStation{
         switch(state){
             case FREE: //Una stazione k-server è FREE finché può servire clients
                 if(path!=null) path.up(now());
-                c.setStartService(now());
                 if(verbose) System.out.println("Stazione "+idStation+" libera, il Cliente "+c.getId()+" può essere servito. Time: "+now()); //debug
+                c.setStartService(now());
                 this.send(d.nextSample(),"departure",c);
                 servingClients++;
                 if(servingClients==numServers) state=State.BUSY;
