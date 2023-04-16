@@ -24,7 +24,6 @@ public class ReflectiveStation extends AbstractStation{
 
     @Msgsrv
     public void finish(){
-        observer.endService(now());
     }
 
     @Msgsrv
@@ -41,17 +40,15 @@ public class ReflectiveStation extends AbstractStation{
     @Override @Msgsrv
     public void arrival(Client c) {
         observer.incrementDeparture();
-        c.setGlobalDepartureTime(now());
-        observer.updateTotalSojournTime(c.getGlobalDepartureTime()-c.getGlobalArrivalTime());
+        observer.updateTotalSojournTime(now()-c.getGlobalArrivalTime());
         thinkingClients++;
-        if (thinkingClients==totalClients) { observer.endService(now()); }
+        observer.updateServiceTime(now()-c.getGlobalArrivalTime());
         if (verbose) System.out.println("Cliente "+c.getId()+" inizia a pensare. Time: "+now());
         this.send(d.nextSample(),"departure",c);
     }
 
     @Override @Msgsrv
     public void departure(Client c) {
-        if (thinkingClients==totalClients) observer.startService(now());
         if (verbose) System.out.println("Cliente "+c.getId()+" smette di pensare. Time: "+now());
         thinkingClients--;
         acquaintances[0].send("arrival",c); //invio alla stazione P1

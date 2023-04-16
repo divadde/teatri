@@ -7,7 +7,8 @@ public class Client {
     private double departureTime; //Istante di uscita da una stazione generica
 
     private double globalArrivalTime; //Istante di arrivo nel sistema
-    private double globalDepartureTime; //Istante di uscita dal sistema
+
+    private double startService; //Istante in cui il cliente inizia un servizio
 
     public Client(int id){
         this.id=id;
@@ -35,14 +36,16 @@ public class Client {
     public void setGlobalArrivalTime(double globalArrivalTime) {
         this.globalArrivalTime = globalArrivalTime;
     }
-    public void setGlobalDepartureTime(double globalDepartureTime){
-        this.globalDepartureTime = globalDepartureTime;
-    }
     public double getGlobalArrivalTime(){
         return globalArrivalTime;
     }
-    public double getGlobalDepartureTime(){
-        return globalDepartureTime;
+
+    public void setStartService(double startService) {
+        this.startService = startService;
     }
+    public double getStartService() {
+        return startService;
+    }
+
 
 }
