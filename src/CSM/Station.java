@@ -16,8 +16,8 @@ public class Station extends AbstractStation{
     private boolean verbose;
 
     @Msgsrv
-    public void init(Distribution d, AbstractStation[] acquaintances, Integer numServers, Integer idStation, Observer observer, Double tEnd, Boolean verbose) throws IllegalArgumentException {
-        if (acquaintances.length == 0 || numServers < 1 || observer == null || tEnd < 0)
+    public void init(Distribution d, AbstractStation[] acquaintances, Integer numServers, Integer idStation, Observer observer, Boolean verbose) throws IllegalArgumentException {
+        if (acquaintances.length == 0 || numServers < 1 || observer == null)
             throw new IllegalArgumentException();
         super.send("init", d, acquaintances);
         this.verbose = verbose;

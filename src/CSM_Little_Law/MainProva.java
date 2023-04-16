@@ -1,4 +1,4 @@
-package CSM;
+package CSM_Little_Law;
 
 import smart.theatre.distributions.*;
 import smart.theatre.standalone.ControlMachine;
@@ -13,11 +13,11 @@ public class MainProva {
         Random r = new Random();
 
         //Creazione distribuzioni di probabilità
-        Distribution ds0 = new ExponentialDistribution(r,Parameters.mu0);
-        Distribution ds1 = new ExponentialDistribution(r,Parameters.mu1);
-        Distribution ds2 = new ExponentialDistribution(r,Parameters.mu2);
-        Distribution ds3 = new HyperExponentialDistribution(r,Parameters.a,Parameters.mu3);
-        Distribution ds4 = new ErlangDistribution(r,Parameters.n4,Parameters.mu4);
+        Distribution ds0 = new ExponentialDistribution(r, Parameters.mu0);
+        Distribution ds1 = new ExponentialDistribution(r, Parameters.mu1);
+        Distribution ds2 = new ExponentialDistribution(r, Parameters.mu2);
+        Distribution ds3 = new HyperExponentialDistribution(r, Parameters.a, Parameters.mu3);
+        Distribution ds4 = new ErlangDistribution(r, Parameters.n4, Parameters.mu4);
         Distribution dr = new UniformDistribution(r,0,1);
 
         //Creazione ControlMachine
@@ -32,16 +32,14 @@ public class MainProva {
         AbstractStation router = new Router();
 
         //Creazione observers
-        Observer os0 = new Observer(),os1 = new Observer(),os2 = new Observer(),os3 = new Observer(),os4 = new Observer();
+        Observer os0 = new Observer(), os1 = new Observer(), os2 = new Observer(), os3 = new Observer(), os4 = new Observer();
 
         //Inizializzazione delle stazioni
         AbstractStation[] acqS0 = {s1}; //Acquaintances
         s0.send("init",ds0,acqS0,Parameters.numClients,os0,Parameters.verbose);
 
-        Path path = new Path(); //Creazione del Path per il calcolo del grado di parallelismo di S1
         AbstractStation[] acqS1 = {router}; //Acquaintances
         s1.send("init",ds1,acqS1,Parameters.numServersS1,1,os1,Parameters.verbose);
-        s1.send("setPath",path);
 
         AbstractStation[] acqR = {s0,s2,s3,s4}; //Acquaintances
         router.send("init",dr,acqR,Parameters.q,Parameters.delay);
@@ -56,28 +54,27 @@ public class MainProva {
 
         //Risultati della simulazione
         System.out.println("\n Resume stazione 1:");
-        System.out.println("Sojourn time: "+os1.sojournTime());
+        System.out.println("Sojourn time: "+os1.sojournTime(Parameters.tEnd, Parameters.mu1));
         System.out.println("Throughput: "+os1.throughput(Parameters.tEnd));
         System.out.println("Utilization: "+os1.utilization(Parameters.tEnd));
-        System.out.println("Mean number of clients in service: "+path.mean(Parameters.tEnd));
 
         System.out.println("\n Resume stazione 2:");
-        System.out.println("Sojourn time: "+os2.sojournTime());
+        System.out.println("Sojourn time: "+os2.sojournTime(Parameters.tEnd, Parameters.mu2));
         System.out.println("Throughput: "+os2.throughput(Parameters.tEnd));
         System.out.println("Utilization: "+os2.utilization(Parameters.tEnd));
 
         System.out.println("\n Resume stazione 3:");
-        System.out.println("Sojourn time: "+os3.sojournTime());
+        System.out.println("Sojourn time: "+os3.sojournTime(Parameters.tEnd, Parameters.mu2)); //PLACE HOLDER todo mu iperesponenz
         System.out.println("Throughput: "+os3.throughput(Parameters.tEnd));
         System.out.println("Utilization: "+os3.utilization(Parameters.tEnd));
 
         System.out.println("\n Resume stazione 4:");
-        System.out.println("Sojourn time: "+os4.sojournTime());
+        System.out.println("Sojourn time: "+os4.sojournTime(Parameters.tEnd, Parameters.mu4)); //PLACE HOLDER todo mu erlang
         System.out.println("Throughput: "+os4.throughput(Parameters.tEnd));
         System.out.println("Utilization: "+os4.utilization(Parameters.tEnd));
 
         System.out.println("\n Resume intero sistema:");
-        System.out.println("Sojourn time: "+os0.sojournTime());
+        System.out.println("Sojourn time: "+os0.sojournTime(Parameters.tEnd, os0.throughput(Parameters.tEnd)));
         System.out.println("Throughput: "+os0.throughput(Parameters.tEnd));
         System.out.println("Utilization: "+os0.utilization(Parameters.tEnd));
     }

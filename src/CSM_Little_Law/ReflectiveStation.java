@@ -1,11 +1,12 @@
-package CSM;
+package CSM_Little_Law;
 
 import smart.theatre.distributions.Distribution;
 
-public class ReflectiveStation extends AbstractStation{
+public class ReflectiveStation extends AbstractStation {
     private Observer observer;
     private static int generation=0;
     private boolean verbose;
+    private Path path;
 
     @Msgsrv
     public void init(Distribution d, AbstractStation[] acquaintances, Integer totalClients, Observer observer, Boolean verbose) throws IllegalArgumentException {
@@ -13,32 +14,33 @@ public class ReflectiveStation extends AbstractStation{
         super.send("init",d,acquaintances);
         this.verbose=verbose;
         this.observer=observer;
+        this.path = new Path();
+        observer.setPath(this.path);
         this.send("generate",totalClients);
     }
 
     @Msgsrv
     public void generate(Integer totalClients){
-        Client c = new Client(++generation);
-        if (verbose) System.out.println("Cliente "+c.getId()+" inizia a pensare. Time: "+now());
-        this.send(d.nextSample(),"departure",c);
+        ++generation;
+        if (verbose) System.out.println("Un cliente inizia a pensare. Time: "+now());
+        this.send(d.nextSample(),"departure");
         if (totalClients>generation) {
             this.send("generate", totalClients);
         }
     }
 
     @Override @Msgsrv
-    public void arrival(Client c) {
+    public void arrival() {
+        path.down(now());
         observer.incrementDeparture();
-        observer.updateTotalSojournTime(now()-c.getGlobalArrivalTime());
-        observer.updateServiceTime(now()-c.getGlobalArrivalTime());
-        if (verbose) System.out.println("Cliente "+c.getId()+" inizia a pensare. Time: "+now());
-        this.send(d.nextSample(),"departure",c);
+        if (verbose) System.out.println("Un cliente inizia a pensare. Time: "+now());
+        this.send(d.nextSample(),"departure");
     }
 
     @Override @Msgsrv
-    public void departure(Client c) {
-        if (verbose) System.out.println("Cliente "+c.getId()+" smette di pensare. Time: "+now());
-        acquaintances[0].send("arrival",c); //invio alla stazione P1
-        c.setGlobalArrivalTime(now());
+    public void departure() {
+        path.up(now());
+        if (verbose) System.out.println("Un cliente smette di pensare. Time: "+now());
+        acquaintances[0].send("arrival"); //invio alla stazione P1
     }
 }
