@@ -14,6 +14,6 @@ public final class Parameters {
 
     final static double tEnd = 36000;
 
-    final static boolean verbose = true;
+    final static boolean verbose = false;
 
 }

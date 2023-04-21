@@ -10,6 +10,8 @@ public class Observer {
         departures=0;
     }
 
+    public int getDepartures() {return departures;}
+
     public void incrementDeparture(){
         departures+=1;
     }

@@ -55,8 +55,8 @@ public class Station extends AbstractStation{
     public void departure(Client c) {
         if (path!=null) path.down(now());
         if (verbose) System.out.println("Cliente "+c.getId()+" parte dalla stazione "+idStation+". Time: "+now()); //debug
-        observer.updateTotalSojournTime(now()-c.getArrivalTime());
         observer.incrementDeparture();
+        observer.updateTotalSojournTime(now()-c.getArrivalTime());
         observer.updateServiceTime(now()-c.getStartService());
         servingClients--;
         if (state==State.BUSY) {

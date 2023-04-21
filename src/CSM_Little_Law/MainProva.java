@@ -52,7 +52,7 @@ public class MainProva {
         //Inizio simulazione
         cm.controller();
 
-        //Risultati della simulazione
+        //Risultati della simulazione //todo: problemi con il sojourn time
         System.out.println("\n Resume stazione 1:");
         System.out.println("Sojourn time: "+os1.sojournTime(Parameters.tEnd, Parameters.mu1));
         System.out.println("Throughput: "+os1.throughput(Parameters.tEnd));

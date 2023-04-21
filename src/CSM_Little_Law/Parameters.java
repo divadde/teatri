@@ -10,7 +10,7 @@ public final class Parameters {
     final static Double[] delay = {0.5,1.5};
 
     final static int numClients = 20;
-    final static int numServersS1 = 20; //Grado di parallelismo di S1 consigliato: 3.
+    final static int numServersS1 = 3; //Grado di parallelismo di S1 consigliato: 3.
 
     final static double tEnd = 36000;
 

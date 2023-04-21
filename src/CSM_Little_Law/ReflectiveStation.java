@@ -17,6 +17,12 @@ public class ReflectiveStation extends AbstractStation {
         this.path = new Path();
         observer.setPath(this.path);
         this.send("generate",totalClients);
+        this.send(Parameters.tEnd,"finish");
+    }
+
+    @Msgsrv
+    public void finish(){
+        observer.updateServiceTime(observer.sojournTime(Parameters.tEnd,observer.throughput(Parameters.tEnd))*observer.getDepartures());
     }
 
     @Msgsrv

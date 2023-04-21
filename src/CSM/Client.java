@@ -4,7 +4,7 @@ public class Client {
     private int id;
     private double arrivalTime; //Istante di arrivo in una stazione generica
     private double globalArrivalTime; //Istante di arrivo nel sistema
-    private double startService; //Istante in cui il cliente inizia un servizio
+    private double startService; //Istante in cui il cliente inizia a essere servito
 
     public Client(int id){
         this.id=id;
