@@ -52,24 +52,24 @@ public class MainProva {
         //Inizio simulazione
         cm.controller();
 
-        //Risultati della simulazione //todo: problemi con il sojourn time
+        //Risultati della simulazione
         System.out.println("\n Resume stazione 1:");
-        System.out.println("Sojourn time: "+os1.sojournTime(Parameters.tEnd, Parameters.mu1));
+        System.out.println("Sojourn time: "+os1.sojournTime(Parameters.tEnd, os1.throughput(Parameters.tEnd)));
         System.out.println("Throughput: "+os1.throughput(Parameters.tEnd));
         System.out.println("Utilization: "+os1.utilization(Parameters.tEnd));
 
         System.out.println("\n Resume stazione 2:");
-        System.out.println("Sojourn time: "+os2.sojournTime(Parameters.tEnd, Parameters.mu2));
+        System.out.println("Sojourn time: "+os2.sojournTime(Parameters.tEnd, os2.throughput(Parameters.tEnd)));
         System.out.println("Throughput: "+os2.throughput(Parameters.tEnd));
         System.out.println("Utilization: "+os2.utilization(Parameters.tEnd));
 
         System.out.println("\n Resume stazione 3:");
-        System.out.println("Sojourn time: "+os3.sojournTime(Parameters.tEnd, Parameters.mu2)); //PLACE HOLDER todo mu iperesponenz
+        System.out.println("Sojourn time: "+os3.sojournTime(Parameters.tEnd, os3.throughput(Parameters.tEnd)));
         System.out.println("Throughput: "+os3.throughput(Parameters.tEnd));
         System.out.println("Utilization: "+os3.utilization(Parameters.tEnd));
 
         System.out.println("\n Resume stazione 4:");
-        System.out.println("Sojourn time: "+os4.sojournTime(Parameters.tEnd, Parameters.mu4)); //PLACE HOLDER todo mu erlang
+        System.out.println("Sojourn time: "+os4.sojournTime(Parameters.tEnd, os4.throughput(Parameters.tEnd))); //PLACE HOLDER todo mu erlang
         System.out.println("Throughput: "+os4.throughput(Parameters.tEnd));
         System.out.println("Utilization: "+os4.utilization(Parameters.tEnd));
 
