@@ -6,7 +6,7 @@ import smart.theatre.standalone.Simulation;
 
 import java.util.Random;
 
-public class MainProva {
+public class Main {
 
     public static void main(String[] args){
 
